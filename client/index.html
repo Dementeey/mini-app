@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/index.css">
+  <title>mini app</title>
+</head>
+<body>
+<div id="app">
+  <h1 class="app__title">TV-Show Table</h1>
+
+  <div class="search">
+    <input class="search__input" type="text" placeholder="Girls.." name="search-tv-show">
+    <button class="search__btn" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 56.966 56.966" xml:space="preserve" width="20px" height="20px">
+          <path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" fill="#d3dee0"/>
+        </svg>
+
+    </button>
+  </div>
+
+  <div class="result">
+    <div class="progress rotating" id="progress">
+      <div class="progress-reverse rotating-reverse"></div>
+    </div>
+    <div class="reject  hide">
+      <p class="reject__text">There is no data for this query.</p>
+    </div>
+    <div class="success hide">
+      <table class="table">
+        <tbody></tbody>
+      </table>
+
+      <div class="modal-for-row-data hide">
+        <div class="overlay"></div>
+        <div class="modal__wrap-content">
+          <button class="modal__close"></button>
+          <img class="modal__img" src="http://via.placeholder.com/172x247" alt="TV-Show Cover">
+          <div class="modal__content">
+
+
+          </div>
+        </div>
+      </div>
+
+  </div>
+  </div>
+</div>
+
+ <script async src="js/index.js"></script>
+</body>
+</html>

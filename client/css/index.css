@@ -1,0 +1,397 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+
+  font-size: 1rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+
+  background-color: #ffffff;
+}
+
+#app {
+  width: 90vw;
+  height: 90vh;
+  margin: 5% auto 0;
+}
+
+@media screen and (max-width: 860px) {
+  #app {
+    width: 100vw;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  #app {
+    max-width: 960px;
+  }
+}
+
+.app__title {
+  font-size: 2.3rem;
+  text-align: center;
+  color: #41b883;
+}
+
+.search {
+  position: relative;
+
+  display: flex;
+  width: 90%;
+  height: 30px;
+  margin: 0 auto;
+  margin-bottom: 30px;
+
+  border-radius: 5px;
+  box-shadow: 0 2px 8px 1px rgba(168, 168, 168, 0.5);
+}
+
+.search__input {
+  width: 100%;
+  height: 100%;
+  padding: 5px 0;
+  padding-left: 10px;
+
+  color: #262626;
+  letter-spacing: 0.5px;
+
+  background-color: #ffffff;
+  border: 1px solid #41b883;
+  border-right: none;
+  border-radius: 5px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  outline: none;
+}
+
+.search__btn {
+  width: 35px;
+  height: 100%;
+  padding: 0;
+  padding-top: 4px;
+
+  line-height: 20px;
+
+  background: #ffffff;
+  border: 1px solid #41b883;
+  border-left: none;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  outline: none;
+  cursor: pointer;
+}
+
+.search__btn:hover path {
+  fill: #41b883;
+}
+
+.hide {
+  display: none;
+}
+
+.result {
+  width: 90%;
+  min-height: 200px;
+  margin: 0 auto;
+
+  border-top: 1px solid transparent;
+}
+
+.reject {
+  width: 100%;
+
+  font-size: 0.85rem;
+  color: #262626;
+}
+
+.reject__text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  height: 30px;
+  margin: 0 auto;
+
+  color: #e21a1a;
+
+  background-color: #d8e3e659;
+  border: 1px solid #e21a1a;
+  border-radius: 7px;
+  box-shadow: 0 2px 8px 1px rgba(168, 168, 168, 0.5);
+}
+
+.table {
+  width: 100%;
+
+  border-collapse: collapse;
+  font-size: 0.75rem;
+  color: #949090;
+
+  box-shadow: 0 2px 8px 1px rgba(168, 168, 168, 0.5);
+}
+
+.table th {
+  padding: 5px 20px 5px 10px;
+
+  font-weight: normal;
+  font-size: 0.8rem;
+  color: #262626;
+
+  border: 1px solid #41b883;
+}
+
+.table td {
+  padding: 5px 10px;
+
+  border: 1px solid #41b883;
+}
+
+.coll-sort {
+  position: relative;
+
+  cursor: pointer;
+}
+
+.coll-sort::after {
+  content: "";
+  position: absolute;
+
+  border: 5px solid transparent;
+  border-top: 5px solid #949090;
+  transform: translate(4px, 6px);
+}
+
+.coll-sort:active::after {
+  border-top-color: #41b883;
+}
+
+.coll-sort:active {
+  color: #41b883;
+}
+
+.coll-sort.sorted-up::after {
+  border-top-color: #41b883;
+  transform: rotate(180deg) translateX(-4px);
+}
+
+.coll-sort.sorted-down::after {
+  border-top-color: #41b883;
+  transform: rotate(0) translate(4px, 6px);
+}
+
+.table td:last-child {
+  text-align: center;
+  color: gold;
+}
+
+.progress,
+.progress-reverse {
+  position: relative;
+
+  margin: 50px auto;
+
+  border-radius: 50%;
+}
+
+.progress {
+  width: 30px;
+  height: 30px;
+
+  border: 2px solid #41b883;
+  border-left: 2px solid transparent;
+}
+
+.progress-reverse {
+  position: absolute;
+  top: 0;
+
+  width: 100%;
+  height: 100%;
+  margin: 0;
+
+  border: 2px solid #e21aa6;
+  border-right: 2px solid transparent;
+  border-bottom: 2px solid transparent;
+}
+
+@keyframes rotating {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rotating {
+  animation: rotating 0.8s linear infinite;
+}
+
+.rotating-reverse {
+  animation: rotating 0.4s linear infinite reverse;
+}
+
+.table__row-data:hover {
+  background-color: rgba(241, 204, 100, 0.7);
+  cursor: pointer;
+}
+
+.table__row-data:hover td:last-child {
+  color: #949090;
+}
+
+.table__row-data:active {
+  background-color: rgb(241, 204, 100);
+}
+
+.modal-for-row-data {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 101;
+
+  width: 100vw;
+  height: 100vh;
+
+  background-color: rgba(147, 143, 143, 0.396);
+  cursor: pointer;
+}
+
+.modal__close {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+
+  width: 25px;
+  height: 25px;
+
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.modal__close::before,
+.modal__close::after {
+  content: "";
+  position: absolute;
+  right: 2px;
+
+  width: 20px;
+  height: 2px;
+
+  background-color: #41b883;
+}
+
+.modal__close::before {
+  transform: rotate(45deg);
+}
+
+.modal__close::after {
+  transform: rotate(-45deg);
+}
+
+.modal__wrap-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 102;
+
+  display: flex;
+  justify-content: space-between;
+  min-width: 450px;
+  width: 80%;
+  max-width: 550px;
+  min-height: 200px;
+  padding: 10px;
+
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 0 5px 2px #41b883;
+  transform: translate(-50%, -50%);
+}
+
+.modal__img {
+  width: 40%;
+  max-width: 200px;
+  max-height: 250px;
+
+  border-radius: 5px;
+}
+
+.modal__content {
+  min-width: 60%;
+  max-height: 80vh;
+  padding: 0 20px 0 10px;
+  overflow: auto;
+}
+
+.modal__content > div {
+  color: #262626;
+  font-size: 0.83rem;
+  line-height: 1.5;
+  border-bottom: 1px solid rgba(147, 143, 143, 0.396);
+}
+
+.modal__content > div a {
+  text-transform: none;
+  font-size: 0.75rem;
+}
+
+.rating {
+  color: gold;
+}
+
+@keyframes close {
+  0% {
+    transform: rotate(45deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  90% {
+    transform: rotate(0deg);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+@keyframes close-reverse {
+  0% {
+    transform: rotate(-45deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  90% {
+    transform: rotate(0deg);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.modal__close--active::before {
+  animation: close 1.3s linear forwards;
+
+}
+.modal__close--active::after {
+  animation: close-reverse 1.3s linear forwards;
+}
