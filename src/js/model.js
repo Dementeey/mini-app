@@ -1,24 +1,14 @@
 export default class Model {
-  constructor(query = 'girls') {
-    this.query = query;
+  constructor() {
     this._resultData = [];
-    this.state = false;
+    this.state = true;
   }
 
-  // для контролера
-  setQuery(setQuery) {
-    return this.query = setQuery;
-  }
-
-  get resultData() {
-    return this._resultData;
-  }
-
-  getFetch(query = this.query) {
+  getFetch(query = 'girls') {
     fetch(`http://api.tvmaze.com/search/shows?q=${query}`)
       .then(r => r.json())
       .then(r => {
-        if (r.length === 0) {
+        if (!r.length) {
           return this.state = false;
         }
         this.state = true;

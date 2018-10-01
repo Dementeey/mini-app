@@ -1,44 +1,53 @@
 export default class View {
   constructor() {
-    // this.request = '';
+    this._globalViewData = [];
   }
 
-  getModalData(modalData) {
-    return this.resultData = modalData;
-  }
-
-  isState(state) {
-    const progress = document.querySelector('#progress');
+  _showOrHide(response) {
     const resultSuccess = document.querySelector('.result .success');
     const resultReject = document.querySelector('.result .reject');
 
+    if (response === 'resolve') {
+      resultReject.classList.add('hide');
+      resultSuccess.classList.remove('hide');
+    }
+    if (response === 'reject') {
+      resultSuccess.classList.add('hide');
+      resultReject.classList.remove('hide');
+    }
+  }
+  // -------------------------------- END ---------------------------------
+
+  // check the status of the response from the server
+  isState(state) {
+    const progress = document.querySelector('#progress');
+
     if (state) {
       progress.classList.add('hide');
-      showOrHide('resolve');
+      this._showOrHide('resolve');
     } else {
-      showOrHide('reject');
-      // progress.classList.remove('hide');
-    }
-
-    function showOrHide(response) {
-      if (response === 'resolve') {
-        resultReject.classList.add('hide');
-        resultSuccess.classList.remove('hide');
-      }
-      if (response === 'reject') {
-        resultSuccess.classList.add('hide');
-        resultReject.classList.remove('hide');
-      }
+      this._showOrHide('reject');
     }
   }
 
   // create new table on result data
-
   createNewTableOnResultData(data) {
+    this._globalViewData = data;
+    console.log(this._globalViewData);
+
+    console.log('-----dada-----');
     console.log(data);
     console.log('-----dada-----');
 
+    const progress = document.querySelector('#progress');
     const tableBody = document.querySelector('.table tbody');
+
+    progress.classList.add('hide');
+
+    if (!data.length) {
+     this._showOrHide('reject')
+    }
+
     tableBody.innerHTML= '<tr></tr>';
 
     for (let i = 0; i < 5; i += 1) {
@@ -105,6 +114,135 @@ export default class View {
           break;
         }
         newTR.appendChild(newTD);
+      }
+    }
+  }
+  // -------------------------------- END ---------------------------------
+
+  // The function of sorting rows by rating or by name
+  _patternSorting(colNum, type, upDown) {
+    const table = document.querySelector('.table');
+    let tbody = table.getElementsByTagName('tbody')[0];
+    let rowsArray = [].slice.call(tableBody.rows, 1);
+    let compare;
+
+    if (upDown === 'up') {
+      switch (type) {
+        case 'number':
+          compare = function(rowA, rowB) {
+            return rowB.cells[colNum].innerHTML - rowA.cells[colNum].innerHTML;
+          };
+          break;
+        case 'string':
+          compare = function(rowA, rowB) {
+            return rowA.cells[colNum].innerHTML > rowB.cells[colNum].innerHTML;
+          };
+          break;
+      }
+    }
+
+    if (upDown === 'down') {
+      switch (type) {
+        case 'number':
+          compare = function(rowA, rowB) {
+            return rowA.cells[colNum].innerHTML - rowB.cells[colNum].innerHTML;
+          };
+          break;
+        case 'string':
+          compare = function(rowA, rowB) {
+            return rowA.cells[colNum].innerHTML < rowB.cells[colNum].innerHTML;
+          };
+          break;
+      }
+    }
+
+    rowsArray.sort(compare);
+    table.removeChild(tbody);
+
+    for (let i = 0; i < rowsArray.length; i++) {
+      tbody.appendChild(rowsArray[i]);
+    }
+
+    table.appendChild(tbody);
+  }
+  // -------------------------------- END ---------------------------------
+
+  // Function to switch classes to html, and sort calls
+  toggleHtmlClassForSortedRow(type, cellIndex) {
+    const table = document.querySelector('.table');
+
+    if (table.querySelector(`[data-type=${type}]`).classList.contains('sorted-up')) {
+      table.querySelector(`[data-type=${type}]`).classList.remove('sorted-up');
+      table.querySelector(`[data-type=${type}]`).classList.add('sorted-down');
+
+      return this._patternSorting(cellIndex, type, 'down');
+    }
+
+    table.querySelector(`[data-type=${type}]`).classList.remove('sorted-down');
+    table.querySelector(`[data-type=${type}]`).classList.add('sorted-up');
+    table.querySelector(`[data-type=${(type === 'number') ? 'string' : 'number'}]`).classList.remove('sorted-down');
+    table.querySelector(`[data-type=${(type === 'number') ? 'string' : 'number'}]`).classList.remove('sorted-up');
+
+    return this._patternSorting(cellIndex, type, 'up');
+  }
+  // -------------------------------- END ---------------------------------
+
+  // Setting values in the modal window with additional info about the show
+  setValueInModal(id) {
+    const data = this._globalViewData;
+    const modalImg = document.querySelector('.modal__img');
+    const modalContent = document.querySelector('.modal__content');
+
+    // clear modal info
+    modalContent.innerHTML = '';
+
+    for (let i = 0; i < Object.keys(data).length; i++) {
+      if (data[i].show.id === +id) {
+        modalImg.src = data[i].show.image
+          ? data[i].show.image.medium : 'https://via.placeholder.com/178x250';
+
+        modalContent.innerHTML = `
+      <div class="genres">Genres:
+        ${data[i].show.genres.length ? data[i].show.genres.join(' | ') : '-'}
+      </div>
+      <div class="language">Language:
+        ${data[i].show.language ? data[i].show.language : '-'}
+      </div>
+      <div class="name">Name:
+        ${data[i].show.name ? data[i].show.name : '-'}
+      </div>
+      <div class="officalSite">Official Site: 
+        <a href="${data[i].show.officialSite}" target="_blank">
+          ${data[i].show.officialSite ? data[i].show.officialSite : ''}
+        </a>
+      </div>
+      <div class="premiered">Premiered:
+        ${data[i].show.premiered ? data[i].show.premiered : '-'}
+      </div>
+      <div class="rating">Rating:
+        ${data[i].show.rating.average ? data[i].show.rating.average : '-'}
+      </div>
+      <div class="runtime">Runtime:
+        ${data[i].show.runtime ? data[i].show.runtime : '-'} min
+      </div>
+      <div class="schedule">Schedule:
+        <span class="days">
+          ${data[i].show.schedule.days[0] ? data[i].show.schedule.days[0] : '-'}
+        </span>
+        <span class="Time">
+           at (${data[i].show.schedule.time ? data[i].show.schedule.time : '-'})
+        </span>
+      </div>
+      <div class="status">Status:
+        ${data[i].show.status ? data[i].show.status : '-'}
+      </div>
+      <div class="type">Type:
+        ${data[i].show.type ? data[i].show.type : '-'}
+      </div>
+      <div class="summary">Summary:
+        ${data[i].show.summary ? data[i].show.summary : '-'}
+      </div>
+     `;
       }
     }
   }
