@@ -3,10 +3,10 @@ const app = document.querySelector('#app');
 const table = app.querySelector('.table');
 const tableBody = app.querySelector('.table tbody');
 const modalRow = app.querySelector('.modal-for-row-data');
-const modalColseBtn = app.querySelector('.modal__close');
-const modalColseOverlay =
+const modalCloseBtn = app.querySelector('.modal__close');
+const modalCloseOverlay =
   app.querySelector('.modal-for-row-data .overlay');
-const searchInpit = app.querySelector('.search__input');
+const searchInput = app.querySelector('.search__input');
 const searchBtn = app.querySelector('.search__btn');
 const resultSuccess = app.querySelector('.result .success');
 const resultReject = app.querySelector('.result .reject');
@@ -20,7 +20,7 @@ const progress = app.querySelector('#progress');
 // Global Variables
 const API_SHOW_QUERY = 'http://api.tvmaze.com/search/shows?q=';
 // const API_SHOW_FULL_LIST = 'http://api.tvmaze.com/schedule/full';
-// const API_SHOW_FULL_LIST = 'http://api.tvmaze.com/shows/1/episodes';
+
 
 let request;
 let resultData;
@@ -55,7 +55,7 @@ function debounce(f, ms) {
 // -------------------------------- END ---------------------------------
 
 
-// Сreate new table on result data
+// Create new table on result data
 function createNewTableOnResultData(data) {
   tableBody.innerHTML= '<tr></tr>';
 
@@ -192,7 +192,8 @@ function setValueInModal(data, id) {
 
   for (let i = 0; i < Object.keys(data).length; i++) {
     if (data[i].show.id === +id) {
-      modalImg.src = data[i].show.image ? data[i].show.image.medium :'https://via.placeholder.com/178x250';
+      modalImg.src = data[i].show.image
+        ? data[i].show.image.medium :'https://via.placeholder.com/178x250';
       modalContent.innerHTML = `
       <div class="genres">Genres:
         ${data[i].show.genres.length ? data[i].show.genres.join(' | ') : '-'}
@@ -203,11 +204,10 @@ function setValueInModal(data, id) {
       <div class="name">Name:
         ${data[i].show.name ? data[i].show.name : '-'}
       </div>
-      ${data[i].show.officialSite
-        ? `<div class="officalSite">Official Site: 
+      <div class="officalSite">Official Site: 
         <a href="${data[i].show.officialSite}" target="_blank">
-          ${data[i].show.officialSite}
-        </a>` : ''}
+          ${data[i].show.officialSite ? data[i].show.officialSite : ''}
+        </a>
       </div>
       <div class="premiered">Premiered:
         ${data[i].show.premiered ? data[i].show.premiered : '-'}
@@ -319,7 +319,7 @@ function initEvent() {
     return getProcessingResponse(request);
   });
 
-  searchInpit.addEventListener('keydown', e => {
+  searchInput.addEventListener('keydown', e => {
     const codeKey = e.keyCode || e.key || e.which;
     if (codeKey === 13) {
       e.preventDefault();
@@ -327,11 +327,11 @@ function initEvent() {
     }
   });
 
-  searchInpit.addEventListener('input', debounce(() => {
+  searchInput.addEventListener('input', debounce(() => {
     let saveRequest = request;
 
-    request = searchInpit.value;
-    searchInpit.placeholder = `Last request: ${saveRequest}`;
+    request = searchInput.value;
+    searchInput.placeholder = `Last request: ${saveRequest}`;
     getProcessingResponse();
   }, 200));
   // -------------------------------- END ---------------------------------
@@ -357,9 +357,9 @@ function initEvent() {
 
   // Events for the modal window
 
-  modalColseOverlay.addEventListener('click', () => modalRow.classList.add('hide'));
+  modalCloseOverlay.addEventListener('click', () => modalRow.classList.add('hide'));
 
-  modalColseBtn.addEventListener('click', e => {
+  modalCloseBtn.addEventListener('click', e => {
     const DELAY_MS = 1300;
 
     e.target.classList.add('modal__close--active');
