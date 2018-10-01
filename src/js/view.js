@@ -24,9 +24,9 @@ export default class View {
 
     if (state) {
       progress.classList.add('hide');
-      View._showOrHide('resolve');
+      this._showOrHide('resolve');
     } else {
-      View._showOrHide('reject');
+      this._showOrHide('reject');
     }
   }
 
@@ -39,7 +39,7 @@ export default class View {
     progress.classList.add('hide');
 
     if (!data.length) {
-     View._showOrHide('reject')
+     this._showOrHide('reject')
     }
 
     tableBody.innerHTML= '<tr></tr>';
