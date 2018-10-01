@@ -16,6 +16,6 @@ export default class Model {
       })
       .catch(() => this.state = false);
     return this._resultData;
-}
+ }
 }
 

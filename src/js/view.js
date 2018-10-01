@@ -24,28 +24,22 @@ export default class View {
 
     if (state) {
       progress.classList.add('hide');
-      this._showOrHide('resolve');
+      View._showOrHide('resolve');
     } else {
-      this._showOrHide('reject');
+      View._showOrHide('reject');
     }
   }
 
   // create new table on result data
   createNewTableOnResultData(data) {
     this._globalViewData = data;
-    console.log(this._globalViewData);
-
-    console.log('-----dada-----');
-    console.log(data);
-    console.log('-----dada-----');
-
     const progress = document.querySelector('#progress');
     const tableBody = document.querySelector('.table tbody');
 
     progress.classList.add('hide');
 
     if (!data.length) {
-     this._showOrHide('reject')
+     View._showOrHide('reject')
     }
 
     tableBody.innerHTML= '<tr></tr>';
@@ -122,6 +116,7 @@ export default class View {
   // The function of sorting rows by rating or by name
   _patternSorting(colNum, type, upDown) {
     const table = document.querySelector('.table');
+    const tableBody = document.querySelector('.table tbody');
     let tbody = table.getElementsByTagName('tbody')[0];
     let rowsArray = [].slice.call(tableBody.rows, 1);
     let compare;
