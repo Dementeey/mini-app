@@ -2,22 +2,30 @@ export default class Model {
   constructor(query = 'girls') {
     this.query = query;
     this._resultData = [];
+    this.state = false;
   }
 
-  // setQuery(setQuery) {
-  //   return this.query = setQuery;
-  // }
-
+  // для контролера
+  setQuery(setQuery) {
+    return this.query = setQuery;
+  }
 
   get resultData() {
     return this._resultData;
   }
 
-  getFetch() {
-    return fetch(`http://api.tvmaze.com/search/shows?q=${this.query}`)
+  getFetch(query = this.query) {
+    fetch(`http://api.tvmaze.com/search/shows?q=${query}`)
       .then(r => r.json())
-      .then(r => this._resultData = r)
-      .catch((error) => error);
-  }
+      .then(r => {
+        if (r.length === 0) {
+          return this.state = false;
+        }
+        this.state = true;
+        this._resultData = r;
+      })
+      .catch(() => this.state = false);
+    return this._resultData;
+}
 }
 

@@ -1,35 +1,24 @@
 export default class View {
-  constructor(resultData) {
-    this.request = '';
-    this.resultData = resultData;
+  constructor() {
+    // this.request = '';
   }
 
   getModalData(modalData) {
     return this.resultData = modalData;
   }
 
-  promise(promiseModel) {
+  isState(state) {
     const progress = document.querySelector('#progress');
     const resultSuccess = document.querySelector('.result .success');
     const resultReject = document.querySelector('.result .reject');
 
-    promiseModel
-      .then(r => r.json)
-      .then(r => {
-        if (r.length) {
-          progress.classList.add('hide');
-          showOrHide('resolve');
-          this.resultData = r;
-          return;
-          // return createNewTableOnResultData(this.resultData);
-
-        }
-        showOrHide('reject');
-        // progress.classList.remove('hide');
-      })
-      .catch(() => {
-        progress.classList.remove('hide');
-      });
+    if (state) {
+      progress.classList.add('hide');
+      showOrHide('resolve');
+    } else {
+      showOrHide('reject');
+      // progress.classList.remove('hide');
+    }
 
     function showOrHide(response) {
       if (response === 'resolve') {
@@ -43,8 +32,13 @@ export default class View {
     }
   }
 
-  // Сreate new table on result data
-  static _createNewTableOnResultData(data) {
+  // create new table on result data
+
+  createNewTableOnResultData(data) {
+    console.log(data);
+    console.log('-----dada-----');
+
+    const tableBody = document.querySelector('.table tbody');
     tableBody.innerHTML= '<tr></tr>';
 
     for (let i = 0; i < 5; i += 1) {
@@ -115,31 +109,4 @@ export default class View {
     }
   }
   // -------------------------------- END ---------------------------------
-
-
-  _debounce(f, ms) {
-    let timer = null;
-
-    return function (...args) {
-      const onComplete = () => {
-        f.apply(this, args);
-        timer = null;
-      };
-
-      if (timer) {
-        clearTimeout(timer);
-      }
-
-      timer = setTimeout(onComplete, ms);
-    };
-  }
-
-  getRequest() {
-    const searchInput = document.querySelector('.search__input');
-    searchInput.addEventListener('input', this._debounce(()=> {
-      this.request = searchInput.value;
-      console.log(searchInput.value);
-    }), 2000);
-    return this.request = searchInput.value;
-  }
 }
