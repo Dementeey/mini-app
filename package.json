@@ -1,0 +1,26 @@
+{
+  "name": "mini-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "mini app search tv-show",
+  "main": "index.js",
+  "devDependencies": {
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.9"
+  },
+  "scripts": {
+    "start": "webpack-dev-server --watch --open --config ./webpack/dev.config.js",
+    "build": "webpack --config ./webpack/build.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dementeey/mini-app.git"
+  },
+  "author": "Dementeey",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dementeey/mini-app/issues"
+  },
+  "homepage": "https://github.com/Dementeey/mini-app#readme"
+}
