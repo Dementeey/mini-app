@@ -3,53 +3,65 @@ export default class Controller {
     this.model = model;
     this.view = view;
 
+    this._modelData = [];
     this._getRequest();
     this._initEvent();
-    this.view.createNewTableOnResultData(
-      this.model.getFetch('girls'));
+    this._getProcessingResponse('girls');
   }
-
-  // TODO -- повесить _debounce после настройки получения данных вовремя
-  _debounce(f, ms) {
-    let timer = null;
-
-    return function (...args) {
-      const onComplete = () => {
-        f.apply(this, args);
-        timer = null;
-      };
-
-      if (timer) {
-        clearTimeout(timer);
-      }
-
-      timer = setTimeout(onComplete, ms);
-    };
-  }
-  // -------------------------------- END ---------------------------------
 
   _getRequest() {
     const searchInput = document.querySelector('.search__input');
     const searchBtn = document.querySelector('.search__btn');
 
-    searchInput.addEventListener('input', getProcessingResponse.bind(this));
-    searchBtn.addEventListener('click', getProcessingResponse.bind(this));
+    searchInput.addEventListener('input', debounce(this._getProcessingResponse.bind(this), 300));
+    searchBtn.addEventListener('click', this._getProcessingResponse.bind(this));
     searchInput.addEventListener('keydown', e => {
       // e.keyCode === 13 - Enter
       if (e.keyCode === 13) {
         e.preventDefault();
-        getProcessingResponse.call(this);
+        this._getProcessingResponse.bind(this);
       }
     });
 
-    function getProcessingResponse() {
-      this.view.createNewTableOnResultData(
-        this.model.getFetch(searchInput.value));
-      this.view.isState(this.model.state);
-      return searchInput.value;
+    function debounce(func, ms) {
+      let timeout;
+      return () => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func(), ms)
+      }
     }
   }
   // -------------------------------- END ---------------------------------
+
+  _getProcessingResponse(setQuery) {
+    const searchInput = document.querySelector('.search__input');
+
+    this.view.showOrHide('pending');
+
+    if (!setQuery && !searchInput.value) {
+      setQuery = '';
+    }
+    if (searchInput.value) {
+      setQuery = searchInput.value;
+    }
+    if (typeof setQuery !== "string") {
+      setQuery = '';
+    }
+
+    this.model.getFetch(setQuery)
+      .then(r => r.json())
+      .then(r => {
+
+        if (!r.length) {
+          this.model.state = false;
+        }
+
+        this.model.state = true;
+        this._modelData = r;
+        this.view.isState(this.model.state);
+        return this.view.createNewTableOnResultData(r);
+      });
+  }
 
   _initEvent() {
     const table = document.querySelector('.table');
@@ -64,7 +76,7 @@ export default class Controller {
 
       if (target.parentElement.classList.contains('table__row-data')) {
         modalRow.classList.remove('hide');
-        this.view.setValueInModal(target.parentElement.getAttribute('data-id'));
+        this.view.setValueInModal(this._modelData, target.parentElement.getAttribute('data-id'));
       }
 
       if (target.classList.contains('coll-sort')) {

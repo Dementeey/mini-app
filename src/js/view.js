@@ -1,45 +1,52 @@
 export default class View {
-  constructor() {
-    this._globalViewData = [];
-  }
 
-  _showOrHide(response) {
+  showOrHide(response) {
     const resultSuccess = document.querySelector('.result .success');
     const resultReject = document.querySelector('.result .reject');
+    const progress = document.querySelector('#progress');
+
+    if (response === 'pending') {
+      resultReject.classList.add('hide');
+      resultSuccess.classList.add('hide');
+      progress.classList.remove('hide');
+    }
 
     if (response === 'resolve') {
       resultReject.classList.add('hide');
       resultSuccess.classList.remove('hide');
+      progress.classList.add('hide');
     }
     if (response === 'reject') {
       resultSuccess.classList.add('hide');
       resultReject.classList.remove('hide');
+      progress.classList.add('hide');
     }
   }
   // -------------------------------- END ---------------------------------
 
   // check the status of the response from the server
   isState(state) {
-    const progress = document.querySelector('#progress');
+    // const progress = document.querySelector('#progress');
 
     if (state) {
-      progress.classList.add('hide');
-      this._showOrHide('resolve');
+      // progress.classList.add('hide');
+      this.showOrHide('resolve');
     } else {
-      this._showOrHide('reject');
+      this.showOrHide('pending');
     }
   }
 
   // create new table on result data
   createNewTableOnResultData(data) {
-    this._globalViewData = data;
     const progress = document.querySelector('#progress');
     const tableBody = document.querySelector('.table tbody');
+    const searchInput = document.querySelector('.search__input');
 
     progress.classList.add('hide');
 
     if (!data.length) {
-     this._showOrHide('reject')
+     this.showOrHide('reject');
+     searchInput.placeholder = 'Type your request...'
     }
 
     tableBody.innerHTML= '<tr></tr>';
@@ -183,8 +190,7 @@ export default class View {
   // -------------------------------- END ---------------------------------
 
   // Setting values in the modal window with additional info about the show
-  setValueInModal(id) {
-    const data = this._globalViewData;
+  setValueInModal(data, id) {
     const modalImg = document.querySelector('.modal__img');
     const modalContent = document.querySelector('.modal__content');
 

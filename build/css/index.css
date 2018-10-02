@@ -106,6 +106,7 @@ body {
 
 .reject {
   width: 100%;
+  margin-top: 50px;
 
   font-size: 0.85rem;
   color: #262626;
